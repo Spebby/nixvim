@@ -75,12 +75,12 @@
                 yazi
                 wakatime-cli
               ];
-              imports = [ ./config ];
+              imports = [ ./plugins ];
             };
           };
 
           minimalModule = {
-            module.imports = [ ./config ];
+            module.imports = [ ./plugins ];
           };
         in
         {
