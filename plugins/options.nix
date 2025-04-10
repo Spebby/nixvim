@@ -15,13 +15,13 @@
 
     hlsearch = false;
     incsearch = true;
-	termguicolors = true;
+    termguicolors = true;
 
     showmode = false;
 
     signcolumn = "yes";
 
     scrolloff = 8;
-	spelllang = "en_us";
+    spelllang = "en_us";
   };
 }

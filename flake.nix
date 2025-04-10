@@ -6,11 +6,12 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixvim.url  = "github:nix-community/nixvim";
+    nixvim.url = "github:nix-community/nixvim";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = {
+  outputs =
+    {
       nixvim,
       nixpkgs,
       flake-parts,
@@ -34,44 +35,44 @@
           bundledModule = {
             module = {
               extraPackages = with pkgs; [
-				# Rust
+                # Rust
                 cargo
                 rustc
                 rustfmt
                 rust-analyzer
                 clippy
 
-				# Python
+                # Python
                 ruff
                 mypy
 
-				# Bash
+                # Bash
                 shellcheck
                 shfmt
 
-				# C
+                # C
                 clang-tools
 
-				# C# / .NET
-				dotnet-sdk
-				omnisharp-roslyn
-				msbuild
-				mono # Unity
+                # C# / .NET
+                dotnetCorePackages.dotnet_8.sdk
+                omnisharp-roslyn
+                #msbuild # Depends on insecure dotnet version (6)
+                mono # Unity
 
-				# JS/TS
-				nodejs
-				nodePackages.typescript
-				nodePackages.eslint
+                # JS/TS
+                nodejs
+                nodePackages.typescript
+                nodePackages.eslint
 
-				# Nix
+                # Nix
                 statix
                 nixfmt-rfc-style
-                
-				# Markdown
-				markdownlint-cli
+
+                # Markdown
+                markdownlint-cli
                 nodePackages.prettier
 
-				# Misc
+                # Misc
                 yazi
                 wakatime-cli
               ];
