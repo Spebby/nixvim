@@ -1,20 +1,23 @@
 # /nixvim/flake.nix
 # Thank you for the config, Wyatt
-
 {
   description = "Spebby's Nixvim configuration";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixvim.url = "github:nix-community/nixvim";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-
   outputs =
     {
+      self,
       nixvim,
       nixpkgs,
       flake-parts,
+      pre-commit-hooks,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -24,14 +27,12 @@
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-
       perSystem =
         { system, ... }:
         let
-          nixvimLib = nixvim.lib.${system};
+          #nixvimLib = nixvim.lib.${system};
           nixvim' = nixvim.legacyPackages.${system};
           pkgs = import nixpkgs { inherit system; };
-
           bundledModule = {
             module = {
               extraPackages = with pkgs; [
@@ -72,37 +73,59 @@
                 markdownlint-cli
                 nodePackages.prettier
 
+                # Zig
+                zig
+
                 # Misc
                 yazi
                 wakatime-cli
+
+                # LaTeX
+                texlab
+                tex-fmt
+                texlivePackages.chktex
               ];
-              imports = [ ./plugins ];
+              imports = [ ./config ];
             };
           };
-
           minimalModule = {
-            module.imports = [ ./plugins ];
+            module.imports = [ ./config ];
           };
         in
         {
           checks = {
-            default = nixvimLib.check.mkTestDerivationFromNixvimModule minimalModule;
+            pre-commit-check = pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              excludes = [
+                ".*/submodules/.*"
+                "^submodules/.*"
+              ];
+              hooks = {
+                flake-checker.enable = true;
+                nixfmt-rfc-style = {
+                  enable = true;
+                  settings.width = 100;
+                };
+                statix = {
+                  enable = true;
+                  settings.ignore = [ "flake.lock" ];
+                };
+                deadnix.enable = true;
+                nil.enable = true;
+                shellcheck.enable = true;
+                shfmt.enable = true;
+                typos.enable = true;
+              };
+            };
           };
-
           packages = {
             default = nixvim'.makeNixvimWithModule bundledModule;
             nvim-minimal = nixvim'.makeNixvimWithModule minimalModule;
           };
-
           devShells = {
             default = pkgs.mkShell {
-              packages = with pkgs; [
-                pre-commit
-                nixfmt-rfc-style
-                statix
-              ];
               shellHook = ''
-                pre-commit install
+                ${self.checks.${system}.pre-commit-check.shellHook}
               '';
             };
           };

@@ -3,6 +3,7 @@
     float.source = "always";
   };
 
+  plugins.zig.enable = true;
   plugins.lsp = {
     enable = true;
     servers = {
@@ -11,6 +12,9 @@
       clangd.enable = true;
       jedi_language_server.enable = true;
       marksman.enable = true;
+
+      zls.enable = true;
+      omnisharp.enable = true;
 
       ruff = {
         enable = true;
