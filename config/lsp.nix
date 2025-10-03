@@ -9,12 +9,23 @@
     servers = {
       nixd.enable = true;
       bashls.enable = true;
+
+      # C++
       clangd.enable = true;
+      cmake.enable = true;
+
+      cssls.enable = true;
+
+      # C#
+      omnisharp.enable = true;
+
+      jsonls.enable = true;
+      lua_ls.enable = true;
+
       jedi_language_server.enable = true;
       marksman.enable = true;
 
       zls.enable = true;
-      omnisharp.enable = true;
 
       ruff = {
         enable = true;

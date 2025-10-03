@@ -8,6 +8,7 @@
       sh = [ "shellcheck" ];
       c = [ "clangtidy" ];
       cpp = [ "clangtidy" ];
+      zig = [ "zig-zlint" ];
       nix = [ "statix" ];
       markdown = [ "markdownlint" ];
       sql = [ "sqlfluff" ];

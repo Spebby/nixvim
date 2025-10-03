@@ -75,6 +75,7 @@
 
                 # Zig
                 zig
+                zig-zlint
 
                 # Misc
                 yazi
