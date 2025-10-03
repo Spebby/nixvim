@@ -84,6 +84,7 @@
                 texlab
                 tex-fmt
                 texlivePackages.chktex
+                sqlfluff
               ];
               imports = [ ./config ];
             };

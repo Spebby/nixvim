@@ -48,6 +48,24 @@
           };
         };
       };
+
+      texlab = {
+        enable = true;
+
+        settings.texlab.chtex = {
+          onOpenAndSave = true;
+          additionalArgs = [ "-n8" ];
+        };
+      };
+
+      sqls = {
+        enable = true;
+        cmd = [
+          "sqls"
+          "--config"
+          ".sqls.yml"
+        ];
+      };
     };
 
     keymaps = {

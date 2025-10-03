@@ -15,7 +15,10 @@
       sections = {
         lualine_a = [ "mode" ];
         lualine_b = [
-          "branch"
+          {
+            __unkeyed-1 = "branch";
+            icon = "";
+          }
           "diff"
         ];
         lualine_c = [
@@ -63,7 +66,7 @@
       require("plenary.job")
         :new({
           command = waka_time_bin,
-          args = { "--today" },
+          args = { "--today", "--today-hide-categories", "true" },
           on_exit = function(output, _)
             local time_today = output:result()[1]
             if time_today == nil or time_today == "" then

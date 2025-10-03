@@ -10,6 +10,7 @@
       cpp = [ "clangtidy" ];
       nix = [ "statix" ];
       markdown = [ "markdownlint" ];
+      sql = [ "sqlfluff" ];
     };
 
     luaConfig.post = ''
