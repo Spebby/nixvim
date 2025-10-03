@@ -86,6 +86,9 @@
                 tex-fmt
                 texlivePackages.chktex
                 sqlfluff
+
+                vimPlugins.nvim-treesitter-parsers.json5
+                yq
               ];
               imports = [ ./config ];
             };

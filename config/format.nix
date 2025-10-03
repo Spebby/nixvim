@@ -28,6 +28,8 @@
         yaml = [ "prettier" ];
         tex = [ "tex-fmt" ];
         sql = [ "sqlfluff" ];
+        zig = [ "zigfmt" ];
+        json = [ "yq" ];
       };
 
       formatters = {

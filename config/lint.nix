@@ -8,10 +8,11 @@
       sh = [ "shellcheck" ];
       c = [ "clangtidy" ];
       cpp = [ "clangtidy" ];
-      zig = [ "zig-zlint" ];
+      zig = [ "zlint" ];
       nix = [ "statix" ];
       markdown = [ "markdownlint" ];
       sql = [ "sqlfluff" ];
+      json = [ "json5" ];
     };
 
     luaConfig.post = ''
