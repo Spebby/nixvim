@@ -1,82 +1,23 @@
+{ lib, ... }:
 {
   diagnostic.settings = {
+    virtual_text = false;
+    virtual_lines = false;
     float.source = "always";
+    signs = {
+      text = lib.nixvim.toRawKeys {
+        "vim.diagnostic.severity.ERROR" = "󰅙";
+        "vim.diagnostic.severity.WARN" = "";
+        "vim.diagnostic.severity.INFO" = "󰋼";
+        "vim.diagnostic.severity.HINT" = "󰌵";
+      };
+    };
   };
 
-  plugins.zig.enable = true;
   plugins.lsp = {
     enable = true;
     servers = {
-      nixd.enable = true;
-      bashls.enable = true;
-
-      # C++
-      clangd.enable = true;
-      cmake.enable = true;
-
-      cssls.enable = true;
-
-      # C#
-      omnisharp.enable = true;
-
-      jsonls.enable = true;
       lua_ls.enable = true;
-
-      jedi_language_server.enable = true;
-      marksman.enable = true;
-
-      zls.enable = true;
-
-      ruff = {
-        enable = true;
-        extraOptions.init_options.settings = {
-          lint = {
-            select = [ "ALL" ];
-            ignore = [
-              "D"
-              "CPY"
-              "T20"
-              "E501"
-            ];
-          };
-        };
-      };
-
-      rust_analyzer = {
-        enable = true;
-        installRustc = false;
-        installCargo = false;
-
-        settings = {
-          checkOnSave = true;
-          check = {
-            command = "clippy";
-            extraArgs = [
-              "--"
-              "-W"
-              "clippy::pedantic"
-            ];
-          };
-        };
-      };
-
-      texlab = {
-        enable = true;
-
-        settings.texlab.chtex = {
-          onOpenAndSave = true;
-          additionalArgs = [ "-n8" ];
-        };
-      };
-
-      sqls = {
-        enable = true;
-        cmd = [
-          "sqls"
-          "--config"
-          ".sqls.yml"
-        ];
-      };
     };
 
     keymaps = {
@@ -113,29 +54,46 @@
           action = "rename";
           desc = "Rename";
         };
-        "<leader>ca" = {
-          action = "code_action";
-          desc = "Code Action";
-        };
         "<C-k>" = {
           action = "signature_help";
           desc = "Signature Help";
         };
       };
       diagnostic = {
-        "<leader>e" = {
+        "<leader>de" = {
           action = "open_float";
           desc = "Line Diagnostics";
         };
         "[d" = {
-          action = "goto_next";
-          desc = "Next Diagnostic";
-        };
-        "]d" = {
           action = "goto_prev";
           desc = "Previous Diagnostic";
+        };
+        "]d" = {
+          action = "goto_next";
+          desc = "Next Diagnostic";
         };
       };
     };
   };
+
+  keymaps = [
+    {
+      key = "<leader>e";
+      action.__raw = "function()
+    vim.diagnostic.config({ virtual_lines = { current_line = true } })
+
+    ns = vim.api.nvim_create_namespace('toggle_virtual_lines')
+
+    local function disable_virtual_lines()
+      vim.diagnostic.config({ virtual_lines = false })
+      vim.on_key(nil, ns)
+    end
+
+    vim.on_key(disable_virtual_lines, ns)
+  end";
+      mode = "n";
+      options.noremap = true;
+      options.desc = "Open virtual lines for the current line";
+    }
+  ];
 }

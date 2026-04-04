@@ -30,12 +30,15 @@
       perSystem =
         { system, ... }:
         let
-          #nixvimLib = nixvim.lib.${system};
+          nixvimLib = nixvim.lib.${system};
           nixvim' = nixvim.legacyPackages.${system};
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
           bundledModule = {
             module = {
-              extraPackages = with pkgs; [
+              extraPackagesAfter = with pkgs; [
                 # Rust
                 cargo
                 rustc
@@ -62,8 +65,8 @@
 
                 # JS/TS
                 nodejs
-                nodePackages.typescript
-                nodePackages.eslint
+                typescript
+                eslint
 
                 # Nix
                 statix
@@ -71,11 +74,16 @@
 
                 # Markdown
                 markdownlint-cli
-                nodePackages.prettier
+                prettier
 
                 # Zig
                 zig
                 zig-zlint
+
+                # Terraform
+                terraform
+                terraform-ls
+                tflint
 
                 # Misc
                 yazi
@@ -99,6 +107,8 @@
         in
         {
           checks = {
+            default = nixvimLib.check.mkTestDerivationFromNixvimModule minimalModule;
+
             pre-commit-check = pre-commit-hooks.lib.${system}.run {
               src = ./.;
               excludes = [

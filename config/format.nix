@@ -3,44 +3,14 @@
     enable = true;
     autoLoad = true;
 
-    settings = {
-      format_on_save = ''
-                function(bufnr)
-                  -- Disable with a global or buffer-local variable
-                  if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-                    return
-                  end
-                  return { timeout_ms = 1000, lsp_fallback = false }
-                end
-        	  '';
-
-      formatters_by_ft = {
-        python = [ "ruff_format" ];
-        sh = [ "shfmt" ];
-        c = [ "clang_format" ];
-        cpp = [ "clang_format" ];
-        rust = [ "rustfmt" ];
-        nix = [ "nixfmt" ];
-        markdown = [
-          "prettier"
-          "markdownlint"
-        ];
-        yaml = [ "prettier" ];
-        tex = [ "tex-fmt" ];
-        sql = [ "sqlfluff" ];
-        zig = [ "zigfmt" ];
-        json = [ "yq" ];
-      };
-
-      formatters = {
-        prettier.prepend_args = [
-          "--prose-wrap"
-          "always"
-        ];
-
-        nixfmt.prepend_args = [ "--strict" ];
-      };
-    };
+    settings.format_on_save = ''
+      function(bufnr)
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+          return
+        end
+        return { timeout_ms = 1000, lsp_fallback = false }
+      end
+    '';
   };
 
   userCommands = {
