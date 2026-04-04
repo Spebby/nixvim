@@ -70,7 +70,7 @@
 
                 # Nix
                 statix
-                nixfmt-rfc-style
+                nixfmt
 
                 # Markdown
                 markdownlint-cli
