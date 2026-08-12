@@ -6,7 +6,6 @@
     };
 
     lint.lintersByFt.nix = [ "statix" ];
-
     lsp.servers.nixd.enable = true;
   };
 }

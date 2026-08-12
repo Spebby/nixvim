@@ -4,10 +4,13 @@
   description = "Spebby's Nixvim configuration";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixvim.url = "github:nix-community/nixvim";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.flake-parts.follows = "flake-parts";
+    };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -17,7 +20,7 @@
       nixvim,
       nixpkgs,
       flake-parts,
-      pre-commit-hooks,
+      git-hooks,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -108,7 +111,7 @@
           checks = {
             default = nixvimLib.check.mkTestDerivationFromNixvimModule minimalModule;
 
-            pre-commit-check = pre-commit-hooks.lib.${system}.run {
+            pre-commit-check = git-hooks.lib.${system}.run {
               src = ./.;
               excludes = [
                 ".*/submodules/.*"
@@ -116,7 +119,7 @@
               ];
               hooks = {
                 flake-checker.enable = true;
-                nixfmt-rfc-style = {
+                nixfmt = {
                   enable = true;
                   settings.width = 100;
                 };
